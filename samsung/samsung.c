@@ -7,7 +7,7 @@
 
 // Samsung SSD Firmware Deobfuscation Tool
 // v0.2 - 2015/02/06
-// https://www.github.com/ddcc/samsung_ssd
+// https://www.github.com/ddcc/drive_firmware
 // GNU GPL v2 - see LICENSE.md
 
 uint8_t encode(uint8_t v) {
@@ -27,11 +27,12 @@ int main(int argc, char** argv) {
 
   uint8_t *buf;
   size_t i ,buf_size;
+  int enc = (argc >= 4 && !strcmp(argv[3], "-e"));
 
   int ret = 0;
 
   if (argc < 3) {
-    printf("Usage: %s <input> <output>\n", argv[0]);
+    printf("Usage: %s <input> <output> [-e] \n", argv[0]);
     ret = -1;
     goto end;
   }
@@ -60,7 +61,7 @@ int main(int argc, char** argv) {
   }
 
   for (i = 0; i < buf_size; i++) {
-    buf[i] = decode(buf[i]);
+    buf[i] = enc ? encode(buf[i]) : decode(buf[i]);
   }
 
   if (!(op = fopen(argv[2], "wb"))) {
